@@ -6,14 +6,17 @@ import CustomDropdown from '../components/CustomDropdown';
 import { ArrowRight, Send } from 'lucide-react';
 
 const Design1 = ({ onSwitch, onGoToDesign1 }) => {
-  const [selectedCircle, setSelectedCircle] = useState(1);
+  const [selectedCircle, setSelectedCircle] = useState(null);
   const [selected, setSelected] = useState('');
 
   const contentMap = {
+    default: { heading: 'Responsive Heading', body: 'Please select one of the interactive circles on the right to view dynamic content related to our design system and technical specifications.' },
     1: { heading: 'Header content #1', body: 'This content is linked to the first circle selection. Generic but functional description text.' },
     2: { heading: 'Header content #2', body: 'The second circle has been selected. Demonstrating state-based dynamic updates for the hero area.' },
     3: { heading: 'Header content #3', body: 'Final tier positioning for the third shape. This confirms controlled component state across the board.' }
   };
+
+  const activeContent = selectedCircle ? contentMap[selectedCircle] : contentMap.default;
 
   const dropdownOptions = [
     { label: 'Sample Item #1', value: '1' },
@@ -34,9 +37,9 @@ const Design1 = ({ onSwitch, onGoToDesign1 }) => {
                 <h1 style={{ fontWeight: 400, color: 'var(--dark-blue)', textAlign: 'left' }}>This is the test</h1>
                 
                 <div className="hero-content">
-                  <h1 style={{ fontWeight: 400, color: 'var(--dark-blue)', textAlign: 'left' }}>{contentMap[selectedCircle].heading}</h1>
+                  <h1 style={{ fontWeight: 400, color: 'var(--dark-blue)', textAlign: 'left' }}>{activeContent.heading}</h1>
                   <p className="regular-text">
-                    {contentMap[selectedCircle].body}
+                    {activeContent.body}
                   </p>
                 </div>
               </div>

@@ -17,19 +17,28 @@ const Navbar = ({ onSwitch, onGoToDesign1 }) => {
       id: 1, 
       label: 'Items 1', 
       disabled: false,
-      items: ['Item 1', 'Item 2', 'Item 3']
+      items: ['List Item 1', 'List Item 2', 'List Item 3', 'List Item 4']
     },
     { 
       id: 2, 
       label: 'Items 2', 
-      disabled: isMobile, 
-      items: ['Item 4', 'Item 5', 'Item 6'] 
+      disabled: false, // No longer visually disabled
+      items: ['List Item A', 'List Item B', 'List Item C', 'List Item D'] 
     }
   ];
 
   const handleMobileClick = (item) => {
-    if (item.disabled) return;
     setActiveSubMenu(activeSubMenu === item.id ? null : item.id);
+  };
+
+  const handleSubItemClick = (subItem) => {
+    if (isMobile) {
+      // On mobile, just do nothing (no navigation)
+      console.log(`Clicked ${subItem} on mobile - No navigation performed`);
+    } else {
+      // On desktop, navigate to Design 2
+      onSwitch();
+    }
   };
 
   return (
@@ -44,7 +53,13 @@ const Navbar = ({ onSwitch, onGoToDesign1 }) => {
               <span className="nav-item-trigger">{item.label}</span>
               <div className="nav-list">
                 {item.items.map((sub, idx) => (
-                  <div key={idx} className="nav-list-item">{sub}</div>
+                  <div 
+                    key={idx} 
+                    className="nav-list-item"
+                    onClick={() => handleSubItemClick(sub)}
+                  >
+                    {sub}
+                  </div>
                 ))}
               </div>
             </div>
@@ -70,28 +85,23 @@ const Navbar = ({ onSwitch, onGoToDesign1 }) => {
             {navItems.map((group) => (
               <div key={group.id} className="mobile-nav-group">
                 <div 
-                  className={`mobile-nav-main ${group.disabled ? 'disabled-item' : ''}`}
+                  className="mobile-nav-main"
                   onClick={() => handleMobileClick(group)}
-                  style={{ cursor: group.disabled ? 'not-allowed' : 'pointer', display: 'flex', justifyContent: 'space-between', padding: '10px' }}
+                  style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', padding: '10px' }}
                 >
-                  <span style={{ color: group.disabled ? 'var(--hint-gray)' : 'var(--dark-blue)' }}>
-                    {group.label} {group.disabled && <small>(Disabled)</small>}
+                  <span style={{ color: 'var(--dark-blue)' }}>
+                    {group.label}
                   </span>
-                  {!group.disabled && (
-                    activeSubMenu === group.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />
-                  )}
+                  {activeSubMenu === group.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </div>
                 
-                {activeSubMenu === group.id && !group.disabled && (
+                {activeSubMenu === group.id && (
                   <div className="mobile-sub-list">
                     {group.items.map((sub, idx) => (
                       <div 
                         key={idx} 
                         className="mobile-sub-item"
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          onGoToDesign1();
-                        }}
+                        onClick={() => handleSubItemClick(sub)}
                         style={{ paddingLeft: '20px', cursor: 'pointer' }}
                       >
                         {sub}
@@ -101,13 +111,6 @@ const Navbar = ({ onSwitch, onGoToDesign1 }) => {
                 )}
               </div>
             ))}
-            
-            {/* Design Toggle (Optional, hidden on mobile) */}
-            {!isMobile && (
-              <button className="btn-v1" onClick={onSwitch} style={{ marginTop: '20px' }}>
-                Switch Design
-              </button>
-            )}
           </div>
         </div>
       )}
