@@ -1,0 +1,17 @@
+/* Custom styles for the app */
+.design-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+}
+
+@media (max-width: 375px) {
+  .sticky-nav {
+    padding: 10px 20px !important;
+    gap: 15px !important;
+  }
+}
